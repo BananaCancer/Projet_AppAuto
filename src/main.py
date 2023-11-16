@@ -56,7 +56,7 @@ def plotHist(df):
         plt.show()
 
 # Load df
-filename = "marketing_campaign.csv"
+filename = ".\data\marketing_campaign.csv"
 df = pd.read_csv(filename, delimiter = "\t")
 
 # Choose columns for features
