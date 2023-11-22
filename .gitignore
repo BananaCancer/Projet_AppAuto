@@ -1,2 +1,6 @@
+#DataSet
+*.csv
+
+#Python
 /.spyproject
 __pycache__
