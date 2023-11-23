@@ -9,19 +9,17 @@ from mlxtend.frequent_patterns import apriori
 from mlxtend.frequent_patterns import association_rules
 
 def getAssociationRules(df_total, list_cols, min_support, max_len):
-    current_df = df_total[list_cols]
-    current_df = pd.get_dummies(current_df, columns = list_cols)
+    df = df_total[list_cols]
+    df = pd.get_dummies(df, columns = list_cols)
     
-    frequent_items = apriori(current_df, use_colnames=True, 
+    frequent_items = apriori(df, use_colnames=True, 
                              min_support = min_support, 
                              max_len = max_len + 1)
     rules = association_rules(frequent_items, metric='lift', min_threshold=1)
     return rules
-    
 
-def getRulesforTarget(rules, product, segment):
-    target = '{\'%s_labeled_%s\'}' %(product,segment)
+def getRulesforTarget(rules, element):
     results = rules[rules['consequents'].astype(str).str\
-                    .contains(target, na=False)]\
+                    .contains(element, na=False)]\
         .sort_values(by='confidence', ascending=False)
     return results

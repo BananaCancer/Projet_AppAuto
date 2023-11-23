@@ -10,6 +10,7 @@ from clustering.plotting import plotSilhouette, plotScatterKmeans, plotScatterDB
 import itertools
 from sklearn.mixture import GaussianMixture
 from clustering.utils import doPCA, makeDictionnary
+from clustering.algorithmsDictionary import getAlgorithms
 
 def clusterKmeans(df, params, verbose):
     k = params["k"]
@@ -159,6 +160,7 @@ algorithms = {
 }
 
 def tuneAlgorithms(df, listAlgorithms, components = -1, verbose = True):
+    listAlgorithms = getAlgorithms(listAlgorithms)
     df = doPCA(df, components)
     results = {}
     for algorithm in listAlgorithms:

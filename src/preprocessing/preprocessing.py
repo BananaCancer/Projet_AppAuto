@@ -50,6 +50,11 @@ def createNewCols(df):
     
     cut_labels_Seniority = ['New customers', 'Active customers', 'Established customers', 'Loyal customers']
     df['Recency_labeled'] = pd.qcut(df['Recency'], q=4, labels=cut_labels_Seniority)
+    
+    df['Age']=2014-df['Birth']
+    cut_labels_age = ['Young', 'Adult', 'Mature', 'Senior']
+    cut_bins = [0, 30, 45, 65, 120]
+    df['Age_group'] = pd.cut(df['Age'], bins=cut_bins, labels=cut_labels_age)
 
 def deleteOutliers(df, viewHist):
     df.drop(df[df["Birth"] < 1935].index, inplace=True)
@@ -59,7 +64,8 @@ def deleteOutliers(df, viewHist):
 
 def encode(df, colnames):
     label_encoder = OrdinalEncoder()
-    df[colnames] = label_encoder.fit_transform(df[colnames])
+    features_encoded = [item + "_encoded" for item in colnames]
+    df[features_encoded] = label_encoder.fit_transform(df[colnames])
 
 def standardize(df, features):
     scaler = StandardScaler()

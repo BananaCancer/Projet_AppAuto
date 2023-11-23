@@ -4,7 +4,6 @@ Created on Wed Nov 22 18:11:36 2023
 
 @author: basil
 """
-
 def analyzeClusters(df, features):
     for cluster in df['Cluster'].unique():
         chosen_data = df[df["Cluster"] == cluster]
@@ -21,12 +20,6 @@ def analyzeClusters(df, features):
                     local_min = chosen_data[feature].min()
                     local_max = chosen_data[feature].max()
                     print(f"{feature} range: {local_min}-{local_max} ({total_min}-{total_max})")        
-            """
-            for col in ["NbTeen", "NbKid", "Marital_Status", "Education"]:
-                total_count = len(df[col].unique())
-                local_count = len(chosen_data[col].unique())
-                print(f"{col}: {local_count}/{total_count}")
-            """
             
             for col in ["Recency", "Income", "Wine", "Fruits", "Meat", "MntFishProducts", "Sweets", "Gold", ]:
                 total_min= df[col].min()

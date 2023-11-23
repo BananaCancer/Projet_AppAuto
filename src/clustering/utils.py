@@ -40,3 +40,7 @@ def makeDictionnary(*params, existing = None):
         }
 
     return result
+
+def getClusters(model, df, components = -1):
+    df = doPCA(df, components)
+    return model.predict(df)
