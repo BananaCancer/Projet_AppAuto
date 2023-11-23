@@ -27,11 +27,9 @@ if __name__ == "__main__":
     # Get association Rules
     list_cols = ["Wine_labeled", "Fruits_labeled", "Meat_labeled", 
                  "Sweets_labeled", "Gold_labeled", "Income_labeled",
-                 "Recency_labeled", 
-                 #"Cluster", "ChildCount", "Education", "Marital_Status"
-                 ]
-    test = pd.get_dummies(df_total[list_cols])
-    rules = getAssociationRules(df_total[list_cols], min_support = 0.08, max_len = 10)
+                 "Recency_labeled", "Cluster", "ChildCount", "Education", 
+                 "Marital_Status"]
+    rules = getAssociationRules(df_total, list_cols, min_support = 0.08, max_len = 10)
     
     # Get rules for specific category
     wineRules = getRulesforTarget(rules, "Wine", "Big spender")

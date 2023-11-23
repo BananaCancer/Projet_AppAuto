@@ -8,9 +8,10 @@ import pandas as pd
 from mlxtend.frequent_patterns import apriori
 from mlxtend.frequent_patterns import association_rules
 
-def getAssociationRules(df_total, min_support, max_len):
+def getAssociationRules(df_total, list_cols, min_support, max_len):
+    current_df = df_total[list_cols]
+    current_df = pd.get_dummies(current_df, columns = list_cols)
     
-    current_df = pd.get_dummies(df_total)
     frequent_items = apriori(current_df, use_colnames=True, 
                              min_support = min_support, 
                              max_len = max_len + 1)
