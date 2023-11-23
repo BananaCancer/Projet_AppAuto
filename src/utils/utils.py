@@ -5,7 +5,7 @@ Created on Wed Nov 22 18:11:36 2023
 @author: basil
 """
 
-def findCommonPoints(df, features):
+def analyzeClusters(df, features):
     for cluster in df['Cluster'].unique():
         chosen_data = df[df["Cluster"] == cluster]
         if (len(chosen_data) >= 10 and len(chosen_data) < 2200):

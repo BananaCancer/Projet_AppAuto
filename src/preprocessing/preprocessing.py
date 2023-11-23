@@ -44,6 +44,12 @@ def createNewCols(df):
     labels = ["Low spender", "Average spender", "High spender", "Big spender"]
     for col in ["Wine", "Fruits", "Meat", "Sweets", "Gold"]:
         df[col + "_labeled"] = pd.qcut(df[col], q=[0, 0.25, 0.5, 0.75, 1], labels=labels)
+        
+    cut_labels_income = ['Low income', 'Medium income', 'High income', 'Very high income']
+    df['Income_labeled'] = pd.qcut(df['Income'], q=4, labels=cut_labels_income)
+    
+    cut_labels_Seniority = ['New customers', 'Active customers', 'Established customers', 'Loyal customers']
+    df['Recency_labeled'] = pd.qcut(df['Recency'], q=4, labels=cut_labels_Seniority)
 
 def deleteOutliers(df, viewHist):
     df.drop(df[df["Birth"] < 1935].index, inplace=True)
