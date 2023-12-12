@@ -56,26 +56,30 @@ def meanAmountSpentByAge(df):
     plt.show()
 
 def meanAmountSpentByIncome(df):
-    #crée les courbes de dépenses montrant le montant moyen dépensé pour chaque catégorie de dépense et par revenu annuel
-    grouped_wines = df.groupby('Income')['MntWines'].mean().reset_index()
-    grouped_fruits = df.groupby('Income')['MntFruits'].mean().reset_index()
-    grouped_meat = df.groupby('Income')['MntMeatProducts'].mean().reset_index()
-    grouped_fish = df.groupby('Income')['MntFishProducts'].mean().reset_index()
-    grouped_sweet = df.groupby('Income')['MntSweetProducts'].mean().reset_index()
-    grouped_gold = df.groupby('Income')['MntGoldProds'].mean().reset_index()
+    # Filter income between 0 and 200000
+    df_filtered = df[(df['Income'] >= 0) & (df['Income'] <= 200000)]
 
-    # Fusionne les données
+    # Create plots showing the average amount spent for each expense category based on income
+    grouped_wines = df_filtered.groupby('Income')['MntWines'].mean().reset_index()
+    grouped_fruits = df_filtered.groupby('Income')['MntFruits'].mean().reset_index()
+    grouped_meat = df_filtered.groupby('Income')['MntMeatProducts'].mean().reset_index()
+    grouped_fish = df_filtered.groupby('Income')['MntFishProducts'].mean().reset_index()
+    grouped_sweet = df_filtered.groupby('Income')['MntSweetProducts'].mean().reset_index()
+    grouped_gold = df_filtered.groupby('Income')['MntGoldProds'].mean().reset_index()
+
+    # Merge the data
     merged_df = pd.merge(grouped_wines, grouped_fruits, on='Income')
     merged_df = pd.merge(merged_df, grouped_meat, on='Income')
     merged_df = pd.merge(merged_df, grouped_fish, on='Income')
     merged_df = pd.merge(merged_df, grouped_sweet, on='Income')
     merged_df = pd.merge(merged_df, grouped_gold, on='Income')
 
-    # Affichage
+    # Display plots
     income_values = merged_df['Income']
     categories = ['Wines', 'Fruits', 'MeatProducts', 'FishProducts', 'SweetProducts', 'GoldProds']
     for i, category in enumerate(categories):
         plt.plot(income_values, merged_df[f'Mnt{category}'], label=category)
+
     plt.xlabel('Revenu annuel')
     plt.ylabel('Montant moyen dépensé')
     plt.title('Montant moyen dépensé par catégorie de dépense et par revenu annuel')
@@ -323,7 +327,7 @@ def meanAmountBirthYScatter(df):
     plt.show()
 
 def meanAmountIncome(df):
-    #scatter le montant moyen dépensé pour chaque catégorie de dépense en fonction du revenu
+    # Scatter plot of the average amount spent for each expense category based on income
     grouped_wines = df.groupby('Income')['MntWines'].mean().reset_index()
     grouped_fruits = df.groupby('Income')['MntFruits'].mean().reset_index()
     grouped_meat = df.groupby('Income')['MntMeatProducts'].mean().reset_index()
@@ -331,7 +335,7 @@ def meanAmountIncome(df):
     grouped_sweet = df.groupby('Income')['MntSweetProducts'].mean().reset_index()
     grouped_gold = df.groupby('Income')['MntGoldProds'].mean().reset_index()
 
-    # Fusionne les données
+    # Merge the data
     merged_df = pd.merge(grouped_wines, grouped_fruits, on='Income')
     merged_df = pd.merge(merged_df, grouped_meat, on='Income')
     merged_df = pd.merge(merged_df, grouped_fish, on='Income')
@@ -340,16 +344,21 @@ def meanAmountIncome(df):
 
     categories = ['Wines', 'Fruits', 'MeatProducts', 'FishProducts', 'SweetProducts', 'GoldProds']
     plt.figure(figsize=(12, 8))
+    
     for i, category in enumerate(categories):
         plt.scatter(merged_df['Income'], merged_df[f'Mnt{category}'], label=category)
-    plt.title('Depenses moyennes par catégorie et par revenu annuel')
+        plt.plot(merged_df['Income'], merged_df[f'Mnt{category}'], linestyle='dashed', marker='o')
+
+    plt.title('Dépenses moyennes par catégorie et par revenu annuel')
     plt.xlabel("Revenu annuel")
-    plt.ylabel("Dépenses moyenne par catégorie")
+    plt.ylabel("Dépenses moyennes par catégorie")
     plt.xticks(rotation=45, ha='right')
+    
     for i, category in enumerate(categories):
         correlation_coefficient, _ = pearsonr(merged_df['Income'], merged_df[f'Mnt{category}'])
         plt.text(0.8, 0.9 - 0.1*i, f"{category} - Correlation Coefficient: {correlation_coefficient:.2f}",
                  horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes, fontsize=12)
+
     plt.savefig('graphs_BDD/correlationIncomExpenses.png')
     plt.show()
 
@@ -371,8 +380,10 @@ def meanAmountNbKid(df):
 
     categories = ['Wines', 'Fruits', 'MeatProducts', 'FishProducts', 'SweetProducts', 'GoldProds']
     plt.figure(figsize=(12, 8))
+    
     for i, category in enumerate(categories):
         plt.scatter(merged_df['Kidhome'], merged_df[f'Mnt{category}'], label=category)
+        plt.plot(merged_df['Kidhome'], merged_df[f'Mnt{category}'], linestyle='dashed', marker='o')
 
     plt.title("Dépenses moyennes par nombre d'enfants dans le foyer")
     plt.xlabel("Nombre d'enfants")
@@ -407,8 +418,11 @@ def meanAmountNbTeen(df):
     merged_df = pd.merge(merged_df, grouped_gold, on='Teenhome')
     categories = ['Wines', 'Fruits', 'MeatProducts', 'FishProducts', 'SweetProducts', 'GoldProds']
     plt.figure(figsize=(12, 8))
+    
     for i, category in enumerate(categories):
         plt.scatter(merged_df['Teenhome'], merged_df[f'Mnt{category}'], label=category)
+        plt.plot(merged_df['Teenhome'], merged_df[f'Mnt{category}'], linestyle='dashed', marker='o')
+
     plt.title("Dépenses moyennes par nombre d'adolescents dans le foyer")
     plt.xlabel("Nombre d'adolescents")
     plt.ylabel("Dépenses moyennes par catégorie")
@@ -416,10 +430,12 @@ def meanAmountNbTeen(df):
     # Set integer ticks on the x-axis
     plt.xticks(list(map(int, merged_df['Teenhome'])))
     plt.xticks(rotation=45, ha='right')
+    
     for i, category in enumerate(categories):
         correlation_coefficient, _ = pearsonr(merged_df['Teenhome'], merged_df[f'Mnt{category}'])
         plt.text(0.8, 0.9 - 0.1*i, f"{category} - Correlation Coefficient: {correlation_coefficient:.2f}",
                  horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes, fontsize=12)
+
     plt.savefig('graphs_BDD/correlationNbTeenExpenses.png')
     plt.show()
 
@@ -441,8 +457,10 @@ def meanAmountEducation(df):
 
     categories = ['Wines', 'Fruits', 'MeatProducts', 'FishProducts', 'SweetProducts', 'GoldProds']
     plt.figure(figsize=(12, 8))
+    
     for i, category in enumerate(categories):
         plt.scatter(range(len(merged_df['Education'])), merged_df[f'Mnt{category}'], label=category)
+        plt.plot(range(len(merged_df['Education'])), merged_df[f'Mnt{category}'], linestyle='dashed', marker='o')
 
     plt.title("Dépenses moyennes par niveau d'éducation")
     plt.xlabel("Niveau d'éducation")
@@ -477,8 +495,10 @@ def meanAmountMaritalStatus(df):
 
     categories = ['Wines', 'Fruits', 'MeatProducts', 'FishProducts', 'SweetProducts', 'GoldProds']
     plt.figure(figsize=(12, 8))
+    
     for i, category in enumerate(categories):
         plt.scatter(range(len(merged_df['Marital_Status'])), merged_df[f'Mnt{category}'], label=category)
+        plt.plot(range(len(merged_df['Marital_Status'])), merged_df[f'Mnt{category}'], linestyle='dashed', marker='o')
 
     plt.title("Dépenses moyennes par statut marital")
     plt.xlabel("Statut marital")
